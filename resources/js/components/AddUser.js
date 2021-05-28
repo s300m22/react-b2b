@@ -10,6 +10,7 @@ const AddUser = () => {
     const [notification,setNotification] = useState('')
     const [role,setRole] = useState('')
 	const history = useHistory();
+	const [dataError, setError] =useState([])
 
      const HandleSubmit = async (e)=>{
         e.preventDefault()
@@ -19,16 +20,61 @@ const AddUser = () => {
                         method: 'POST',
                         headers: {'Content-Type':'application/json'},
                         body: JSON.stringify({
+
                             username,firstname,lastname,email,password,notification,role
                         })
                     })
+					.then(response => {
+                        if(!response.ok){ throw response}
+                            return response.json()
+                           
+                    })
+                    .then(data => {
+                        history.push('/alluser')
+                    })
+                    .catch(error => {
+						if (typeof error.json === "function") {
+							error.json().then(jsonError => {
+								console.log("Json error from API");
+								const arr = JSON.parse(jsonError)
+								setError([arr])
+							
 
-                    //await  router.push('/')
-					history.push('/alluser')
+							}).catch(genericError => {
+								console.log("Generic error from API");
+								console.log(error.statusText);
+							});
+						} else {
+							console.log("Fetch error");
+							console.log(error);
+						}
+					});
+
+				
+				
 
     }
-    
+	console.log(dataError);
+    const resultError = dataError.map(err => {
+		return(
+			
+			//console.log(err)
+			
+			
+			<div role="alert" aria-live="polite" aria-atomic="true" class="alert alert-dismissible alert-danger">
+						<button type="button" aria-label="Close" class="close">×</button>
+     
+    			<div>{err.username}</div>
+				<div>{err.firstname}</div>
+				<div>{err.lastname}</div>
+				<div>{err.email}</div>
+				<div>{err.password}</div>
+			</div>
+			
+		)
+	})
     return (
+		
         <div>
 	
 					<div className="page-header">
@@ -44,8 +90,8 @@ const AddUser = () => {
 							</div>
 						</div>
 					</div>
-					
-					
+				
+				
 					<div className="row">
 						<div className="col-lg-12">
 							<div className="card">
@@ -53,7 +99,9 @@ const AddUser = () => {
 									<h4 className="card-title">User</h4>
 								</div>
 								<div className="card-body">
-									<form onSubmit={HandleSubmit}>
+									<form onSubmit={HandleSubmit} enctype="multipart/form-data">
+									{resultError}
+
                                     <div className="form-group row">
 											<label className="col-form-label col-md-2">Username (required)</label>
 											<div className="col-md-10">
@@ -86,18 +134,19 @@ const AddUser = () => {
 											</div>
 										</div>
 									
-										<div className="form-group row">
-											<label className="col-form-label col-md-2">Send User Notification</label>
-											<div className="col-md-10">
-												<div className="checkbox">
-													<label style={{cursor: 'pointer'}}>
-														<input type="checkbox" name="checkbox"  onChange={e => setNotification(e.target.checked) }/> Send the new user an email about their account.
-													</label>
-												</div>
-												
-											
-											</div>
-										</div>
+								<div className="form-group row">
+                                <label className="col-form-label col-md-2">Send User Notification</label>
+                                <div className="col-md-10">
+                                    <div className="checkbox">
+                                    <input type="checkbox" id="notification_2" className="check"  onChange={e => setNotification(e.target.checked) } />
+                                     <label htmlFor="notification_2" className="checktoggle">checkbox</label>
+
+                                    
+                                    </div>
+                                    
+                                
+                                </div>
+                            </div>
 										<div className="form-group row">
 											<label className="col-form-label col-md-2">Role</label>
 											<div className="col-md-10">

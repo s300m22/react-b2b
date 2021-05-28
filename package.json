@@ -13,7 +13,7 @@
         "@babel/preset-react": "^7.0.0",
         "axios": "^0.21",
         "bootstrap": "^4.0.0",
-        "jquery": "^3.2",
+        "jquery": "^3.6.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "popper.js": "^1.12",
@@ -25,7 +25,18 @@
         "sass-loader": "^8.0.0"
     },
     "dependencies": {
+        "@tinymce/tinymce-react": "^3.12.2",
         "next-routes": "^1.4.2",
+        "react-app-polyfill": "^2.0.0",
+        "react-dropzone": "^11.3.2",
+        "react-hook-form": "^7.2.2",
+        "react-laravel-datatable": "^0.1.9",
         "react-router-dom": "^5.2.0"
-    }
+    },
+    "development": [
+        "ie 11",
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+    ]
 }
